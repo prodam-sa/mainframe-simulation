@@ -1,19 +1,18 @@
 package main
 
 import (
-	"net"
 	"log"
+	"net"
 	"strconv"
 )
 
 // MainframeSocket struct
 type MainframeSocket struct {
-	Host string
-	Port int
-	Tipo string
-	Count int
+	Host   string
+	Port   int
+	Tipo   string
+	Count  int
 	Server net.Listener
-	Lock chan int
 }
 
 func main() {
@@ -23,9 +22,9 @@ func main() {
 
 	for i := 0; i < 4; i++ {
 		socket := MainframeSocket{
-			Host: "localhost",
-			Port: 3000 + i,
-			Tipo: "tcp",
+			Host:  "localhost",
+			Port:  3000 + i,
+			Tipo:  "tcp",
 			Count: 0,
 		}
 		mainframeSockets = append(mainframeSockets, &socket)
@@ -40,7 +39,7 @@ func main() {
 }
 
 func startServer(socket *MainframeSocket, err error) {
-	socket.Server, err = net.Listen(socket.Tipo, socket.Host + ":" + strconv.Itoa(socket.Port))
+	socket.Server, err = net.Listen(socket.Tipo, socket.Host+":"+strconv.Itoa(socket.Port))
 	if err != nil {
 		log.Println(err)
 	}
@@ -54,9 +53,7 @@ func startServer(socket *MainframeSocket, err error) {
 }
 
 func handleRequest(conn net.Conn, socket *MainframeSocket) {
-	var c []byte
-  for {
+	for {
 		conn.Write([]byte("Mensagem recebida pelo servidor\n"))
-		socket.Lock <- conn.Read(c)
 	}
 }
